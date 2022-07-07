@@ -1,3 +1,15 @@
+"""
+Created in July, 2022 by
+[chifi - an open source software dynasty.](https://github.com/orgs/ChifiSource)
+by team
+[toolips](https://github.com/orgs/ChifiSource/teams/toolips)
+This software is MIT-licensed.
+### ToolipsBase64
+Toolips Base64 exports the base64img Component, a component which can be created
+from regular image data.
+##### Module Composition
+- [**ToolipsBase64**](https://github.com/ChifiSource/ToolipsBase64.jl)
+"""
 module ToolipsBase64
 using Toolips
 using ToolipsSession
@@ -5,53 +17,41 @@ using Base64
 
 """
 **Base64 Interface**
-### base64img(path::String) -> ::Component
-------------------
-Creates a Base64 image component from an image file.
-#### example
-```
-
-```
-"""
-function base64img(path::String)
-      filetype = split(path, ".")[2]
-      raw = read(path)
-      io = IOBuffer();
-      b64 = Base64.Base64EncodePipe(io)
-      write(b64, raw)
-      close(b64)
-      mysrc = String(io.data)
-      img("myimg", src = "data:image/$filetype;base64," * mysrc)
-end
-
-"""
-**Base64 Interface**
-### base64img(raw::String, filetype::String = "png") -> ::Component
+### base64img(raw::String) -> ::Component
 ------------------
 Creates a Base64 image component from a raw string of image data.
 #### example
 ```
-
+function serveb64(c::Connection)
+      rawpng = read("myimage.png", String)
+      image = base64img(rawpng)
+      write!(c, image)
+end
 ```
 """
-function base64img(raw::String, filetype::String = "png")
-      io = IOBuffer();
-      b64 = Base64.Base64EncodePipe(io)
+function base64img(raw::String)
+      io::IOBuffer = IOBuffer();
+      b64::Base64.Base64EncodePipe = Base64.Base64EncodePipe(io)
       write(b64, raw)
       close(b64)
-      mysrc = String(io.data)
-      img("myimg", src = "data:image/$filetype;base64," * mysrc)
+      mysrc::String = String(io.data)
+      img("myimg", src = "data:image/$filetype;base64," * mysrc)::Component
 end
 
 """
 **Base64 Interface**
-### base64img(raw::String, filetype::String = "png") -> ::Component
+### base64img(raw::Any, filetype::String = "png") -> ::Component
 ------------------
 Creates a Base64 image component from any type shown with the image/png mime.
 For example, a plot which only shows as a png.
 #### example
 ```
-
+function serveb64(c::Connection)
+      # this content could be a Julia Image, or a plot, in this example we assume
+      #    julia_img is a PNG Julia image.
+      image = base64img(julia_img, "png")
+      write!(c, image)
+end
 ```
 """
 function base64img(raw::Any, filetype::String = "png")
