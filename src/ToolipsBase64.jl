@@ -17,7 +17,7 @@ using Base64
 
 """
 **Base64 Interface**
-### base64img(raw::String) -> ::Component
+### base64img(name::String, raw::String, filetype::String = "png") -> ::Component
 ------------------
 Creates a Base64 image component from a raw string of image data.
 #### example
@@ -29,7 +29,7 @@ function serveb64(c::Connection)
 end
 ```
 """
-function base64img(raw::String)
+function base64img(name::String, raw::String, filetype::String = "png")
       io::IOBuffer = IOBuffer();
       b64::Base64.Base64EncodePipe = Base64.Base64EncodePipe(io)
       write(b64, raw)
@@ -40,9 +40,9 @@ end
 
 """
 **Base64 Interface**
-### base64img(raw::Any, filetype::String = "png") -> ::Component
+### base64img(name::String, raw::Any, filetype::String = "png") -> ::Component
 ------------------
-Creates a Base64 image component from any type shown with the image/png mime.
+Creates a Base64 image component from any type shown with the image/**filetype** mime.
 For example, a plot which only shows as a png.
 #### example
 ```
@@ -54,7 +54,7 @@ function serveb64(c::Connection)
 end
 ```
 """
-function base64img(raw::Any, filetype::String = "png")
+function base64img(name::String, raw::Any, filetype::String = "png")
       io = IOBuffer();
       b64 = Base64.Base64EncodePipe(io)
       show(b64, "image/$filetype", raw)
