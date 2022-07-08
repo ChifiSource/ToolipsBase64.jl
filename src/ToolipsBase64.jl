@@ -69,8 +69,16 @@ end
 ------------------
 Updates a given img component by name with the raw source as Base64
 #### example
-```
-
+```julia
+function serveb64(c::Connection)
+      # this content could be a Julia Image, or a plot, in this example we assume
+      #    julia_img is a PNG Julia image.
+      image = base64img("myimage", julia_img, "png")
+      on(c, image, "click") do cm::ComponentModifier
+            update_base64!(cm, "image", other_julia_img, "png")
+      end
+      write!(c, image)
+end
 ```
 """
 function update_base64!(cm::ComponentModifier, name::String, raw::Any,
@@ -90,7 +98,15 @@ end
 Updates a given img component with the raw source as Base64
 #### example
 ```
-
+function serveb64(c::Connection)
+      # this content could be a Julia Image, or a plot, in this example we assume
+      #    julia_img is a PNG Julia image.
+      image = base64img("image", julia_img, "png")
+      on(c, image, "click") do cm::ComponentModifier
+            update_base64!(cm, image, other_julia_img, "png")
+      end
+      write!(c, image)
+end
 ```
 """
 function update_base64!(cm::ComponentModifier, s::Component, raw::Any,
@@ -105,7 +121,15 @@ end
 Updates a given img component by name with the raw source as Base64
 #### example
 ```
-
+function serveb64(c::Connection)
+      # this content could be a Julia Image, or a plot, in this example we assume
+      #    julia_img is a PNG Julia image.
+      image = base64img(julia_img, "png")
+      on(c, image, "click") do cm::ComponentModifier
+            update_base64!(cm, "image", other_julia_img, "png")
+      end
+      write!(c, image)
+end
 ```
 """
 function update_base64!(cm::ComponentModifier, name::String, raw::String,
@@ -116,21 +140,6 @@ function update_base64!(cm::ComponentModifier, name::String, raw::String,
       close(b64)
       mysrc = String(io.data)
       cm[name] = "src" => "data:image/$filetype;base64," * mysrc
-end
-
-"""
-**Base64 Interface**
-### update_base64!(cm::ComponentModifier, name::Component, raw::String, filetype::String = "png") -> ::Component
-------------------
-Updates a given img component with the raw source as Base64
-#### example
-```
-
-```
-"""
-function update_base64!(cm::ComponentModifier, s::Component, raw::String,
-      filetype::String = "png")
-      update_base64!(cm, s.name, raw, filetype)
 end
 
 export base64img, update_base64!
