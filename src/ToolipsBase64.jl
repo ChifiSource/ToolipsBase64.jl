@@ -13,6 +13,7 @@ from regular image data.
 module ToolipsBase64
 using Toolips
 using ToolipsSession
+import ToolipsSession: Modifier
 using Base64
 
 """
@@ -136,7 +137,7 @@ function serveb64(c::Connection)
 end
 ```
 """
-function update_base64!(cm::ComponentModifier, name::String, raw::String,
+function update_base64!(cm::Modifier, name::String, raw::String,
       filetype::String = "png")
       io = IOBuffer();
       b64 = Base64.Base64EncodePipe(io)
