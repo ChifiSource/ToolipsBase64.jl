@@ -2,7 +2,7 @@
 
 - [Documentation](doc.toolips.app/extensions/toolips_base64)
 - [Toolips](https://github.com/ChifiSource/Toolips.jl)
-- [Extension Gallery](https://doc.toolips.app/?page=gallery&selected=base64)
+- [Extension Gallery](https://toolips.app/?page=gallery&selected=base64)
 ### usage
 Go ahead and try this example code in your REPL!
 ```julia

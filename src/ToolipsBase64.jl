@@ -13,6 +13,7 @@ from regular image data.
 module ToolipsBase64
 using Toolips
 using ToolipsSession
+import ToolipsSession: Modifier
 using Base64
 
 """
@@ -29,13 +30,15 @@ function serveb64(c::Connection)
 end
 ```
 """
-function base64img(name::String, raw::String, filetype::String = "png")
+function base64img(name::String = " ", raw::String = "", filetype::String = "png",
+      p::Pair{String, String} ...; args ...)
       io::IOBuffer = IOBuffer();
       b64::Base64.Base64EncodePipe = Base64.Base64EncodePipe(io)
       write(b64, raw)
       close(b64)
       mysrc::String = String(io.data)
-      img("myimg", src = "data:image/$filetype;base64," * mysrc)::Component
+      img("myimg", src = "data:image/$filetype;base64," * mysrc, p ...,
+      args ...)::Component{:img}
 end
 
 """
@@ -54,13 +57,15 @@ function serveb64(c::Connection)
 end
 ```
 """
-function base64img(name::String, raw::Any, filetype::String = "png")
+function base64img(name::String, raw::Any, filetype::String = "png",
+      p::Pair{String, String} ...; args ...)
       io = IOBuffer();
       b64 = Base64.Base64EncodePipe(io)
       show(b64, "image/$filetype", raw)
       close(b64)
       mysrc = String(io.data)
-      img("myimg", src = "data:image/$filetype;base64," * mysrc)
+      img("myimg", src = "data:image/$filetype;base64," * mysrc, p ...,
+      args ...)::Component{:img}
 end
 
 """
@@ -81,7 +86,7 @@ function serveb64(c::Connection)
 end
 ```
 """
-function update_base64!(cm::ComponentModifier, name::String, raw::Any,
+function update_base64!(cm::Modifier, name::String, raw::Any,
       filetype::String = "png")
       io = IOBuffer();
       b64 = Base64.Base64EncodePipe(io)
@@ -109,7 +114,7 @@ function serveb64(c::Connection)
 end
 ```
 """
-function update_base64!(cm::ComponentModifier, s::Component, raw::Any,
+function update_base64!(cm::Modifier, s::Component, raw::Any,
       filetype::String = "png")
       update_base64!(cm, s.name, raw, filetype)
 end
@@ -132,7 +137,7 @@ function serveb64(c::Connection)
 end
 ```
 """
-function update_base64!(cm::ComponentModifier, name::String, raw::String,
+function update_base64!(cm::Modifier, name::String, raw::String,
       filetype::String = "png")
       io = IOBuffer();
       b64 = Base64.Base64EncodePipe(io)
