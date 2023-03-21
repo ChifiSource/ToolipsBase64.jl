@@ -18,31 +18,6 @@ using Base64
 
 """
 **Base64 Interface**
-### base64img(name::String, raw::String, filetype::String = "png") -> ::Component
-------------------
-Creates a Base64 image component from a raw string of image data.
-#### example
-```
-function serveb64(c::Connection)
-      rawpng = read("myimage.png", String)
-      image = base64img(rawpng)
-      write!(c, image)
-end
-```
-"""
-function base64img(name::String = " ", raw::String = "", filetype::String = "png",
-      p::Pair{String, String} ...; args ...)
-      io::IOBuffer = IOBuffer();
-      b64::Base64.Base64EncodePipe = Base64.Base64EncodePipe(io)
-      write(b64, raw)
-      close(b64)
-      mysrc::String = String(io.data)
-      img("myimg", src = "data:image/$filetype;base64," * mysrc, p ...,
-      args ...)::Component{:img}
-end
-
-"""
-**Base64 Interface**
 ### base64img(name::String, raw::Any, filetype::String = "png") -> ::Component
 ------------------
 Creates a Base64 image component from any type shown with the image/**filetype** mime.
@@ -64,7 +39,7 @@ function base64img(name::String, raw::Any, filetype::String = "png",
       show(b64, "image/$filetype", raw)
       close(b64)
       mysrc = String(io.data)
-      img("myimg", src = "data:image/$filetype;base64," * mysrc, p ...,
+      img("myimg", src = "'data:image/$filetype;base64," * mysrc * "'", p ...,
       args ...)::Component{:img}
 end
 
@@ -93,7 +68,7 @@ function update_base64!(cm::Modifier, name::String, raw::Any,
       show(b64, "image/$filetype", raw)
       close(b64)
       mysrc = String(io.data)
-      cm[name] = "src" => "data:image/$filetype;base64," * mysrc
+      cm[name] = "src" => "'data:image/$filetype;base64," * mysrc * "'"
 end
 
 """
@@ -144,7 +119,7 @@ function update_base64!(cm::Modifier, name::String, raw::String,
       write(b64, raw)
       close(b64)
       mysrc = String(io.data)
-      cm[name] = "src" => "data:image/$filetype;base64," * mysrc
+      cm[name] = "src" => "'data:image/$filetype;base64," * mysrc * "'"
 end
 
 export base64img, update_base64!
