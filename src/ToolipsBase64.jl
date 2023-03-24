@@ -39,7 +39,7 @@ function base64img(name::String, raw::Any, filetype::String = "png",
       show(b64, "image/$filetype", raw)
       close(b64)
       mysrc = String(io.data)
-      img("myimg", src = "'data:image/$filetype;base64," * mysrc * "'", p ...,
+      img(name, src = "'data:image/$filetype;base64," * mysrc * "'", p ...,
       args ...)::Component{:img}
 end
 
@@ -68,7 +68,7 @@ function update_base64!(cm::Modifier, name::String, raw::Any,
       show(b64, "image/$filetype", raw)
       close(b64)
       mysrc = String(io.data)
-      cm[name] = "src" => "'data:image/$filetype;base64," * mysrc * "'"
+      cm[name] = "src" => "data:image/$filetype;base64," * mysrc
 end
 
 """
@@ -119,7 +119,7 @@ function update_base64!(cm::Modifier, name::String, raw::String,
       write(b64, raw)
       close(b64)
       mysrc = String(io.data)
-      cm[name] = "src" => "'data:image/$filetype;base64," * mysrc * "'"
+      cm[name] = "src" => "data:image/$filetype;base64," * mysrc
 end
 
 export base64img, update_base64!
