@@ -1,3 +1,8 @@
+## dead repo
+`ToolipsBase64` is now a part of `ToolipsServables`. [ToolipsServables](https://github.com/ChifiSource/ToolipsServables.jl).
+--
+- ( **This project can still be used with `Toolips` `0.2`.** )
+
 <div align = "center"><img src = "https://github.com/ChifiSource/image_dump/blob/main/toolips/toolipsbase64.png" href = "https://toolips.app"></img></div>
 
 - [Documentation](doc.toolips.app/extensions/toolips_base64)
